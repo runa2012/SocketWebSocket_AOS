@@ -18,35 +18,43 @@ Jetpack Compose 기반 UI와 상태 관리, Ping/Heartbeat, 자동 재연결, �
 ---
 
 ## 프로젝트 구조
+<br/>
+📦src<br/>
+┣ 📁main<br/>
+┃ ┣ 📄TcpChatClient.kt # 소켓 통신 클라이언트<br/>
+┃ ┣ 📄HeartbeatManager.kt # 핑/타임아웃 체크<br/>
+┃ ┣ 📄ChatViewModel.kt # UI 상태 관리<br/>
+┃ ┣ 📄ChatScreen.kt # Compose UI 화면<br/>
+┃ ┗ 📄LocalTestServer.kt # 로컬 테스트용 에코 서버<br/>
+┣ 📁test<br/>
+┃ ┗ 📄TcpChatClientTest.kt # 단위 테스트<br/>
 
-📦src
-┣ 📁main
-┃ ┣ 📄TcpChatClient.kt # 소켓 통신 클라이언트
-┃ ┣ 📄HeartbeatManager.kt # 핑/타임아웃 체크
-┃ ┣ 📄ChatViewModel.kt # UI 상태 관리
-┃ ┣ 📄ChatScreen.kt # Compose UI 화면
-┃ ┗ 📄LocalTestServer.kt # 로컬 테스트용 에코 서버
-┣ 📁test
-┃ ┗ 📄TcpChatClientTest.kt # 단위 테스트
+---
 
 TcpChatClient에서 "127.0.0.1", 9999로 접속하여 메시지를 전송하고 응답을 수신합니다.
 
-연결 상태 관리
-sealed class ConnectionState {
-    object Connected : ConnectionState()
-    object Disconnected : ConnectionState()
-    object Reconnecting : ConnectionState()
-    data class Error(val message: String) : ConnectionState()
-}
+---
 
-단위 테스트 (TcpChatClientTest.kt)
-@Test
-fun testMessageEcho() = runTest {
-    val client = TcpChatClient("127.0.0.1", 9999)
-    client.connectWithRetry()
-    client.sendMessage("Hello Test")
-    assertTrue(messages.any { it.contains("Hello Test") })
-}
+연결 상태 관리<br/>
+sealed class ConnectionState {<br/>
+    object Connected : ConnectionState()<br/>
+    object Disconnected : ConnectionState()<br/>
+    object Reconnecting : ConnectionState()<br/>
+    data class Error(val message: String) : ConnectionState()<br/>
+}<br/>
+
+---
+
+단위 테스트 (TcpChatClientTest.kt)<br/>
+@Test<br/>
+fun testMessageEcho() = runTest {<br/>
+    val client = TcpChatClient("127.0.0.1", 9999)<br/>
+    client.connectWithRetry()<br/>
+    client.sendMessage("Hello Test")<br/>
+    assertTrue(messages.any { it.contains("Hello Test") })<br/>
+}<br/>
+
+---
 
 향후 작업 내용
 - 메시지 암호화 (AES/SSL 등)-
